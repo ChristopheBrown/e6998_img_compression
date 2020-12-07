@@ -71,12 +71,23 @@ class RnnConv(Layer):
         self.out_gate = self.dense_sigmoid(out_gate)
         self.cell_state = self.dense_tanh(cell_state)
 
+        
+#         print(f'cell shape: {self.cell.shape}')
+        # needed to add a tf.squeeze() to get rid of an arbitrary 5th dim that was added
         new_cell_p1 = tf.multiply(self.forget_gate, tf.expand_dims(self.cell, axis=0))
+        if (len(new_cell_p1.shape) == 5):
+            new_cell_p1 = tf.squeeze(new_cell_p1, axis=0)
+#         print(f' new cell shape: {new_cell_p1.shape}')
+#         print(f' squeezed shape: {tf.squeeze(new_cell_p1,axis=0).shape}')
+
+        
         new_cell_p2 = tf.multiply(self.in_gate, self.cell_state)
         self.new_cell = new_cell_p1 + new_cell_p2
         self.new_hidden = tf.multiply(self.out_gate, Dense(1, activation="tanh")(self.new_cell))
         
         self.cell = self.new_cell # should this update the state of the LSTM cell in this layer (and not propagate forward)
+        self.hidden = self.new_hidden
         
-        return self.new_hidden #, self.new_cell
+#         return self.new_hidden , self.new_cell
+        return self.new_cell
         # had to comment the second return because only one tensor can be returned from the layer
