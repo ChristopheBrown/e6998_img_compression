@@ -35,10 +35,15 @@ def rnn_conv(name, inputs, hiddens, filters, kernel_size, strides):
     with tf.variable_scope(name, reuse=tf.AUTO_REUSE):
         conv_inputs = tf.layers.conv2d(inputs=inputs, filters=gates_filters,
                                        kernel_size=kernel_size, strides=strides, padding='same', name='conv_inputs')
+        
         conv_hidden = tf.layers.conv2d(inputs=hidden, filters=gates_filters,
                                        kernel_size=kernel_size, padding='same', name='conv_hidden')
+        
+        
     in_gate, f_gate, out_gate, c_gate = tf.split(
         conv_inputs + conv_hidden, 4, axis=-1)
+    
+    
     in_gate = tf.nn.sigmoid(in_gate)
     f_gate = tf.nn.sigmoid(f_gate)
     out_gate = tf.nn.sigmoid(out_gate)
@@ -88,8 +93,11 @@ class encoder(object):
 
     def init_hidden(self):
         """Initialize hidden and cell states"""
+        
         height = padding(padding(self.height, 2), 2)
         width = padding(padding(self.width, 2), 2)
+        
+        
         self.hiddens1 = initial_hidden(
             self.batch_size, ENCODER1_DIM, [height, width], 'encoder1')
         height = padding(height, 2)
@@ -103,11 +111,20 @@ class encoder(object):
 
     def encode(self, inputs):
         """Compress inputs into a vector of 128 lengths with value {-1, 1}"""
+        
+        
+        
         with tf.variable_scope('encoder', reuse=tf.AUTO_REUSE):
             encoder_rnn_input = tf.layers.conv2d(
                 inputs=inputs, filters=ENCODER_INPUT_DIM, kernel_size=[3, 3], strides=(2, 2), padding='same', name='encoder_rnn_input')
+            
+            
+            
             self.hiddens1 = rnn_conv('encoder_rnn_conv_1',
                                      encoder_rnn_input, self.hiddens1, ENCODER1_DIM, [3, 3], (2, 2))
+            
+            
+            
             self.hiddens2 = rnn_conv('encoder_rnn_conv_2',
                                      self.hiddens1[0], self.hiddens2, ENCODER2_DIM, [3, 3], (2, 2))
             self.hiddens3 = rnn_conv('encoder_rnn_conv_3',
