@@ -17,3 +17,5 @@ The homepage looks like this:
 The about page looks like this: 
 
 <img width="1124" alt="compression_shot1" src="https://user-images.githubusercontent.com/23324881/104183820-8ab79980-53e0-11eb-9caf-2c27459391f4.png">
+
+<u>Note</u>: This Django code is from <a href="https://djangoforbeginners.com/">djangoforbeginners.com</a>
