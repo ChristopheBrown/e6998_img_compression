@@ -15,10 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from pages import views
 
 # whenever a user visits the homepage, theyll be directed through the pages app first
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('pages.urls'))
+    path('', include('pages.urls')),
+    path('', views.predictImage, name="predict_image")
 
 ]

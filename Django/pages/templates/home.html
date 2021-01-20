@@ -1,5 +1,10 @@
 <!-- templates/home.html -->
 
+
+<!--
+Instructions video on how to upload an image and run a model
+https://www.youtube.com/watch?v=mgX-2_ybqNk -->
+
 {% extends 'base.html' %}
 
 {% block content %}
@@ -17,6 +22,11 @@ How it works:
   <li> Go to your unique link to redownload your image.
 </ol>
 
-<button type="button">Upload Image</button>
+<form method="post" enctype="multipart/form-data" action="predictImage/">
+{% csrf_token %}
+
+<input type="submit" value="Upload Image" >
+
+</form>
 
 {% endblock %}
